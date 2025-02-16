@@ -12,6 +12,8 @@ services:
   studio:
     container_name: supabase-studio
     image: supabase/studio:20250113-83c9420
+    labels:
+      io.portainer.accesscontrol.public: "true"
     restart: unless-stopped
     healthcheck:
       test:
@@ -52,6 +54,8 @@ services:
   kong:
     container_name: supabase-kong
     image: kong:2.8.1
+    labels:
+      io.portainer.accesscontrol.public: "true"
     restart: unless-stopped
     ports:
       - ${KONG_HTTP_PORT}:8000/tcp
@@ -80,6 +84,8 @@ services:
   auth:
     container_name: supabase-auth
     image: supabase/gotrue:v2.167.0
+    labels:
+      io.portainer.accesscontrol.public: "true"
     restart: unless-stopped
     healthcheck:
       test:
@@ -163,6 +169,8 @@ services:
   rest:
     container_name: supabase-rest
     image: postgrest/postgrest:v12.2.0
+    labels:
+      io.portainer.accesscontrol.public: "true"
     restart: unless-stopped
     depends_on:
       db:
@@ -187,6 +195,8 @@ services:
     # This container name looks inconsistent but is correct because realtime constructs tenant id by parsing the subdomain
     container_name: realtime-dev.supabase-realtime
     image: supabase/realtime:v2.34.7
+    labels:
+      io.portainer.accesscontrol.public: "true"
     restart: unless-stopped
     depends_on:
       db:
@@ -232,6 +242,8 @@ services:
   storage:
     container_name: supabase-storage
     image: supabase/storage-api:v1.14.5
+    labels:
+      io.portainer.accesscontrol.public: "true"
     restart: unless-stopped
     volumes:
       - ./volumes/storage:/var/lib/storage:z
@@ -275,6 +287,8 @@ services:
   imgproxy:
     container_name: supabase-imgproxy
     image: darthsim/imgproxy:v3.8.0
+    labels:
+      io.portainer.accesscontrol.public: "true"
     restart: unless-stopped
     volumes:
       - ./volumes/storage:/var/lib/storage:z
@@ -297,6 +311,8 @@ services:
   meta:
     container_name: supabase-meta
     image: supabase/postgres-meta:v0.84.2
+    labels:
+      io.portainer.accesscontrol.public: "true"
     restart: unless-stopped
     depends_on:
       db:
@@ -315,6 +331,8 @@ services:
   functions:
     container_name: supabase-edge-functions
     image: supabase/edge-runtime:v1.67.0
+    labels:
+      io.portainer.accesscontrol.public: "true"
     restart: unless-stopped
     volumes:
       - ./volumes/functions:/home/deno/functions:Z
@@ -339,6 +357,8 @@ services:
   analytics:
     container_name: supabase-analytics
     image: supabase/logflare:1.4.0
+    labels:
+      io.portainer.accesscontrol.public: "true"
     restart: unless-stopped
     ports:
       - 4000:4000
@@ -383,10 +403,12 @@ services:
       # GOOGLE_PROJECT_ID: ${GOOGLE_PROJECT_ID}
       # GOOGLE_PROJECT_NUMBER: ${GOOGLE_PROJECT_NUMBER}
 
-  # Comment out everything below this point if you are using an external Postgres database
+      # Comment out everything below this point if you are using an external Postgres database
   db:
     container_name: supabase-db
     image: supabase/postgres:15.8.1.020
+    labels:
+      io.portainer.accesscontrol.public: "true"
     restart: unless-stopped
     volumes:
       - ./volumes/db/realtime.sql:/docker-entrypoint-initdb.d/migrations/99-realtime.sql:Z
@@ -444,6 +466,8 @@ services:
   vector:
     container_name: supabase-vector
     image: timberio/vector:0.28.1-alpine
+    labels:
+      io.portainer.accesscontrol.public: "true"
     restart: unless-stopped
     volumes:
       - ./volumes/logs/vector.yml:/etc/vector/vector.yml:ro
@@ -473,6 +497,8 @@ services:
   supavisor:
     container_name: supabase-pooler
     image: supabase/supavisor:1.1.56
+    labels:
+      io.portainer.accesscontrol.public: "true"
     restart: unless-stopped
     ports:
       - ${POSTGRES_PORT}:5432
